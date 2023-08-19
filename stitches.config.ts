@@ -1,9 +1,14 @@
 import { createStitches } from '@stitches/react';
 
 export const COLORS = {
-  main: '#C2D7E4',
-  grade1: '#616C72',
-  incorrect: '#af6868',
+  background: '#B5C2CA',
+  grade1: '#fff',
+  grade2: '#fbfbfb',
+  grade3: '#dfdfdf',
+  grade4: '#616C72',
+  grade5: '#696969',
+  grade6: '#081225',
+  grade7: '#000',
 };
 
 export const {
@@ -18,9 +23,5 @@ export const {
 } = createStitches({
   theme: {
     colors: COLORS,
-  },
-  media: {
-    moblie: '(max-width: 1023px)',
-    pc: '(min-width: 1024px)',
   },
 });

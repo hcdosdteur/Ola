@@ -1,4 +1,3 @@
-export * from './MainPage';
-export * from './Awards';
-export * from './Assignment';
-export * from './Member';
+export * from './Main';
+export * from './Create';
+export * from './Upload';

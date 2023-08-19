@@ -1,25 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { globalCss } from '#/stitches.config';
-import Main from '@/pages/main';
-import Login from '@/Login';
-import Signup from '@/Signup';
+
+import { Create, Upload, Main } from '@/pages/router';
 
 import '@/assets/fonts/index.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { styled } from '@stitches/react';
 
 globalCss({
   ':root': {
-    '@moblie': { fontSize: '6px' },
-    '@pc': { fontSize: '10px' },
+    fontSize: '10px',
   },
   '*': {
     fontFamily: 'SFpro',
     fontSize: '1.6rem',
     boxSizing: 'border-box',
-    color: '$main',
+    color: '$grade7',
     fontWeight: 600,
-    letterSpacing: '-0.02em',
+    letterSpacing: '-0.01em',
   },
   '*::-webkit-scrollbar': {
     display: 'none',
@@ -31,13 +30,15 @@ globalCss({
     borderRadius: '1rem',
   },
   body: {
-    backgroundColor: '#000',
+    backgroundColor: '$background',
     margin: 0,
   },
   a: {
     width: 'inherit',
     height: 'inherit',
     color: 'inherit',
+    fontSize: 'inherit',
+    fontWeight: 'inherit',
     textDecoration: 'none',
   },
   p: {
@@ -46,27 +47,42 @@ globalCss({
     fontWeight: 'inherit',
     margin: 0,
   },
+  input: {
+    outline: 'none',
+  },
 })();
 
-const Router = () => {
-  return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/awards" element={<Main />} />
-      <Route path="/loading" element={<Main />} />
-      <Route path="/member" element={<Main />} />
-      <Route path="/assignment" element={<Main />} />
-      <Route path="/" element={<Main />} />
-      <Route path="*" element={<Navigate to="/" />} />
-    </Routes>
-  );
-};
+const Root = styled('div', {
+  position: 'relative',
+  display: 'flex',
+  justifyContent: 'center',
+  overflow: 'auto',
+  width: '100vw',
+  height: '100vh',
+});
+
+const Wrapper = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  position: 'relative',
+  width: '100%',
+  maxWidth: '140rem',
+  padding: '2rem',
+  gap: '2rem',
+});
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Router />
-    </BrowserRouter>
+    <Root>
+      <Wrapper>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Main />} />
+            <Route path="/create" element={<Create />} />
+            <Route path="/create/upload" element={<Upload />} />
+          </Routes>
+        </BrowserRouter>
+      </Wrapper>
+    </Root>
   </React.StrictMode>,
 );
