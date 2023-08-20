@@ -1,13 +1,14 @@
-import { styled } from '@stitches/react';
+import { CSSProperties, styled } from '@stitches/react';
 import { ReactElement } from 'react';
 
 export const Btn: React.FC<{
   padding?: string;
   onclick?: () => void;
+  css?: CSSProperties | undefined;
   children: React.ReactElement | string;
-}> = ({ onclick, padding, children }) => {
+}> = ({ onclick, padding, css, children }) => {
   return (
-    <Button onClick={onclick} css={{ padding: `${padding}` }}>
+    <Button style={css} onClick={onclick} css={{ padding: `${padding}` }}>
       {children}
     </Button>
   );

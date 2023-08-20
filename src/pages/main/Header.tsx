@@ -1,17 +1,22 @@
+import { useNavigate } from 'react-router-dom';
 import { styled } from '@stitches/react';
 import { Container } from '@/component/Container';
 
 import { ReactComponent as SearchIcon } from '@/assets/icons/search.svg';
+import { ReactComponent as Cross } from '@/assets/icons/cross.svg';
 
-const containerCSS = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  gap: '6rem',
+const style = {
+  container: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    gap: '6rem',
+  },
 };
 
 export const Header: React.FC<{ isMain?: boolean }> = ({ isMain = true }) => {
+  const navigate = useNavigate();
   return (
-    <Container width="100%" css={containerCSS}>
+    <Container width="100%" css={style.container}>
       <Logo>
         <H>H</H>OLA
       </Logo>
@@ -21,7 +26,9 @@ export const Header: React.FC<{ isMain?: boolean }> = ({ isMain = true }) => {
           <SearchIcon style={{ position: 'absolute', right: 20, bottom: 9 }} />
         </SearchBar>
       ) : (
-        <div></div>
+        <Rotate>
+          <Cross onClick={() => navigate('/')} />
+        </Rotate>
       )}
     </Container>
   );
@@ -56,4 +63,14 @@ const Search = styled('input', {
   maxWidth: '40rem',
   fontSize: '1.8rem',
   lineHeight: `${1.8 * 1.5}rem`,
+});
+
+const Rotate = styled('div', {
+  width: '4.8rem',
+  height: '4.8rem',
+  cursor: 'pointer',
+  '&:hover': {
+    transition: 'all 0.2s ease-in-out',
+    transform: 'rotate(180deg)',
+  },
 });
