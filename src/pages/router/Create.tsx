@@ -161,7 +161,16 @@ export const Create = () => {
             Submit
           </Btn>
         </Container>
-        <Container width="100%">
+        <Container
+          width="100%"
+          css={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '3rem',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
           <Title2>Select an A/B test (comparison) store</Title2>
           <Compare>
             <Container
@@ -171,9 +180,9 @@ export const Create = () => {
                 height: '30rem',
               }}
             >
-              <div>Empty</div>
+              <div>selected value</div>
             </Container>
-            <div>VS</div>
+            <VS>VS</VS>
             <Container
               css={{
                 border: '.2rem solid $grade3',
@@ -181,7 +190,7 @@ export const Create = () => {
                 height: '30rem',
               }}
             >
-              <div></div>
+              <div>similar value </div>
             </Container>
           </Compare>
           <Btn
@@ -248,4 +257,11 @@ const Option = styled('option', {
 
 const Compare = styled('div', {
   display: 'flex',
+  gap: '1.5rem',
+  alignItems: 'center',
+});
+
+const VS = styled('div', {
+  fontSize: '3rem',
+  lineHeight: '100%',
 });
