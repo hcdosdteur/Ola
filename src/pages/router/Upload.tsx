@@ -9,15 +9,20 @@ import moment from 'moment';
 import axios from 'axios';
 import { Btn } from '@/component/Button';
 import { useNavigate } from 'react-router-dom';
-import { Radio, RadioGroup } from '@/component/Radio';
+import { Radio } from '@/component/Radio';
+import { useLocation } from 'react-router-dom';
 
 const m = 2.5;
 
 export const Upload = () => {
+  const location = useLocation();
+
   const [price, setPrice] = useState<string>('');
   const [copy, setCopy] = useState<string>('');
   const navigate = useNavigate();
   const [value, setValue] = useState<0 | 1>(0);
+
+  const userInfo = { ...location.state };
 
   const onchange1 = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value);
@@ -27,6 +32,22 @@ export const Upload = () => {
     console.log(e.target.value);
     setCopy(e.target.value);
   };
+
+  const PostToUpload = async () => {
+    userInfo.type = value;
+    userInfo.copy = copy;
+    console.log(userInfo);
+    try {
+      const res = await axios.post('http://localhost:5000/ola', userInfo);
+      console.log(res.data, res.status);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    console.log(userInfo);
+  }, []);
 
   return (
     <>
@@ -87,7 +108,13 @@ export const Upload = () => {
         >
           <Title2>Preview</Title2>
           <Pre>picture</Pre>
-          <Btn padding="1rem 3rem" onclick={() => console.log(value)}>
+          <Btn
+            padding="1rem 3rem"
+            onclick={() => {
+              console.log(value);
+              PostToUpload();
+            }}
+          >
             Complete
           </Btn>
         </Container>

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Container } from '@/component/Container';
 import { Header } from '@/pages/main';
 import { styled } from '@stitches/react';
@@ -13,8 +13,19 @@ import { useNavigate } from 'react-router-dom';
 export const Create = () => {
   const [store, setStore] = useState<Store[] | undefined>();
   const [product, setProduct] = useState<Product[] | undefined>();
-
-  const name = useRef(null);
+  const [postPro, setPostPro] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  const [postStore, SetPostStore] = useState<string>('');
+  const [date, setDate] = useState<string>('');
+  const [sendData, setSendData] = useState<{
+    name: string;
+    duration: string[];
+    product: string;
+    store: string;
+    versus: string;
+    type: number;
+    copy: string;
+  }>();
 
   const navigate = useNavigate();
 
@@ -29,6 +40,50 @@ export const Create = () => {
     } catch (err) {
       console.log('Error >>', err);
     }
+  };
+  const PostToCreate = async () => {
+    const data = {
+      name: name,
+      duration: [`${moment().format('YYYY-MM-DD')}`, date],
+      product: postPro,
+      store: postStore,
+      versus: await olaSimilar(),
+      type: 0,
+      copy: '',
+    };
+
+    console.log(data);
+    setSendData(data);
+    // await axios.post('http://localhost:5000/store', data);
+  };
+
+  const olaSimilar = async (): Promise<string> => {
+    const data = {
+      product: postPro,
+      store: postStore,
+    };
+    const res = await axios.post('http://localhost:5000/ola/similar', data);
+    console.log(res.data._id);
+    return res.data._id;
+  };
+
+  const nameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value);
+    setName(e.target.value);
+  };
+
+  const changeTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDate(e.target.value);
+  };
+
+  const changeProduct = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    console.log(e.target.value);
+    setPostPro(e.target.value);
+  };
+
+  const changeStore = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    console.log(e.target.value);
+    SetPostStore(e.target.value);
   };
 
   useEffect(() => {
@@ -48,7 +103,7 @@ export const Create = () => {
         >
           <InputContainer>
             <Title>ads name</Title>
-            <Input ref={name} type={'text'} />
+            <Input onChange={(e) => nameChange(e)} type={'text'} />
           </InputContainer>
           <InputContainer>
             <Title>Start day</Title>
@@ -70,17 +125,21 @@ export const Create = () => {
           <InputContainer>
             <Title>Finish day</Title>
             <Time>
-              <Input css={{ width: '15rem' }} type={'date'} />
+              <Input
+                css={{ width: '15rem' }}
+                onChange={changeTime}
+                type={'date'}
+              />
               <Input css={{ width: '15rem' }} type={'time'} />
             </Time>
           </InputContainer>
           <InputContainer>
             <Title>Choose store</Title>
-            <Select name="order" form="myForm">
+            <Select name="order" onChange={changeStore} form="myForm">
               <Option value="none">=== Store ===</Option>
               {store &&
                 store.map((item, idx) => (
-                  <Option key={idx} value="americano">
+                  <Option key={idx} value={item._id}>
                     {item.name}
                   </Option>
                 ))}
@@ -88,17 +147,19 @@ export const Create = () => {
           </InputContainer>
           <InputContainer>
             <Title>Choose a product to advertise</Title>
-            <Select name="order" form="myForm">
+            <Select name="order" onChange={changeProduct} form="myForm">
               <Option value="none">=== Product ===</Option>
               {product &&
                 product.map((item, idx) => (
-                  <Option key={idx} value="americano">
+                  <Option key={idx} value={item._id}>
                     {item.name}
                   </Option>
                 ))}
             </Select>
           </InputContainer>
-          <Btn css={{ marginTop: '1rem' }}>Submit</Btn>
+          <Btn css={{ marginTop: '1rem' }} onclick={PostToCreate}>
+            Submit
+          </Btn>
         </Container>
         <Container width="100%">
           <Title2>Select an A/B test (comparison) store</Title2>
@@ -123,7 +184,13 @@ export const Create = () => {
               <div></div>
             </Container>
           </Compare>
-          <Btn padding="1rem 3rem" onclick={() => navigate('/create/upload')}>
+          <Btn
+            padding="1rem 3rem"
+            onclick={() => {
+              PostToCreate();
+              navigate('/create/upload', { state: sendData });
+            }}
+          >
             Next
           </Btn>
         </Container>
